@@ -8,14 +8,12 @@ public class GamePadDriver extends SimpleDriver{
     private DataRecorder recorder;
     private boolean initialized;
 
-
     @Override
     public Action control(SensorModel sensors){
         if(!initialized){
             System.out.println("Inizializzazione Controller");
             controllers = new ControllerManager();
             controllers.initSDLGamepad();
-            recorder = new DataRecorder("data.csv");
             initialized = true;
         }
         Action action = new Action();
@@ -25,8 +23,15 @@ public class GamePadDriver extends SimpleDriver{
         float deadzone = 0.15f;
         float accel = controller.rightTrigger;
         float brake = controller.leftTrigger;
+        float sens = 0.35f;
 
-        float steer = Math.abs(rawSteer) < deadzone ? 0.0f : rawSteer;
+        float scaledSteer = 0;
+        if(Math.abs(rawSteer) < deadzone)
+            scaledSteer = 0.0f;
+        else{
+            scaledSteer = (Math.abs(rawSteer) - deadzone) / (1 - deadzone);
+        }
+        float steer = (float) Math.signum(rawSteer) * scaledSteer * sens;
 
         //Salva in RAM tutte le informazioni riguardo ai sensori
         recorder.record(sensors.getTrackEdgeSensors(), sensors.getAngleToTrackAxis(), sensors.getSpeed(), sensors.getTrackPosition(),
@@ -34,7 +39,6 @@ public class GamePadDriver extends SimpleDriver{
                 sensors.getDistanceFromStartLine(), sensors.getDistanceRaced(), sensors.getFuelLevel(), sensors.getLastLapTime(),
                 sensors.getRPM(), sensors.getWheelSpinVelocity(), sensors.getZSpeed(), sensors.getZ(), steer, accel, brake
         );
-
 
         action.steering = steer;
         action.accelerate = accel;
@@ -59,6 +63,7 @@ public class GamePadDriver extends SimpleDriver{
 
         System.out.println("Restarting the race!");
     }
+
     private int getGear(SensorModel sensors) {
         int gear = sensors.getGear();
         double rpm = sensors.getRPM();
