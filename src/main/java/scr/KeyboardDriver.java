@@ -38,8 +38,8 @@ public class KeyboardDriver extends SimpleDriver implements NativeKeyListener {
         switch (e.getKeyCode()) {
             case NativeKeyEvent.VC_W -> accel = 1.0f;
             case NativeKeyEvent.VC_S -> brake = 1.0f;
-            case NativeKeyEvent.VC_LEFT -> steer = 0.5f;
-            case NativeKeyEvent.VC_RIGHT -> steer = -0.5f;
+            case NativeKeyEvent.VC_LEFT -> steer = 0.3f;
+            case NativeKeyEvent.VC_RIGHT -> steer = -0.3f;
         }
     }
 
