@@ -23,7 +23,7 @@ public class DataRecorder {
         for(int i = 0; i < 4; i++){
             header.append("wheelSpinVelocity_").append(i).append(",");
         }
-        header.append("ZSpeed,Z");
+        header.append("ZSpeed,Z,");
         header.append("steer,accel,brake");
         dataRows.add(header.toString());
     }

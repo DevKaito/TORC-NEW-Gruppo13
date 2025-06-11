@@ -25,11 +25,11 @@ public class GamePadDriver extends SimpleDriver{
             return action;
 
         float rawSteer = -controller.leftStickX;
-        float deadzone = 0.2f;
+        float deadzone = 0.15f;
         float accel = controller.rightTrigger;
         float brake = controller.leftTrigger;
 
-        float sens = 0.15f;
+        float sens = 0.25f;
 
         float scaledSteer = 0;
         if(Math.abs(rawSteer) < deadzone)

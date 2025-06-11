@@ -32,10 +32,10 @@ X_train, X_test, y_train, y_test = train_test_split(X_raw, y_raw, test_size=0.2,
 
 # === 5. Modello ===
 model = MLPRegressor(
-    hidden_layer_sizes=(128, 128),
+    hidden_layer_sizes=(192, 192),
     activation='relu',
     solver='adam',
-    max_iter=500,
+    max_iter=150,
     random_state=1,
     verbose=True
 )
