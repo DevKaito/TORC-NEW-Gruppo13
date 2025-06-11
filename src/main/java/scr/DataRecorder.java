@@ -24,6 +24,7 @@ public class DataRecorder {
             header.append("wheelSpinVelocity_").append(i).append(",");
         }
         header.append("ZSpeed,Z");
+        header.append("steer,accel,brake");
         dataRows.add(header.toString());
     }
 
@@ -36,29 +37,28 @@ public class DataRecorder {
         StringBuilder row = new StringBuilder();
 
         for (int i = 0; i < 19; i++) {
-            row.append(String.format(Locale.US, "%.3f", trackEdgeSensors[i])).append(",");
+            row.append(String.format(Locale.US, "%.5f", trackEdgeSensors[i])).append(",");
         }
-
-        row.append(String.format(Locale.US, "%.4f", angleToTrackAxis)).append(",");
-        row.append(String.format(Locale.US, "%.3f", speed)).append(",");
-        row.append(String.format(Locale.US, "%.4f", trackPosition)).append(",");
+        row.append(angleToTrackAxis).append(",");
+        row.append(speed).append(",");
+        row.append(trackPosition).append(",");
         row.append(gear).append(",");
-        row.append(String.format(Locale.US, "%.4f", lateralSpeed)).append(",");
-        row.append(String.format(Locale.US, "%.3f", currentLapTime)).append(",");
-        row.append(String.format(Locale.US, "%.2f", damage)).append(",");
-        row.append(String.format(Locale.US, "%.3f", distanceFromStartLine)).append(",");
-        row.append(String.format(Locale.US, "%.3f", distanceRaced)).append(",");
-        row.append(String.format(Locale.US, "%.3f", fuelLevel)).append(",");
-        row.append(String.format(Locale.US, "%.3f", lastLapTime)).append(",");
-        row.append(String.format(Locale.US, "%.3f", RPM)).append(",");
+        row.append(lateralSpeed).append(",");
+        row.append(currentLapTime).append(",");
+        row.append(damage).append(",");
+        row.append(distanceFromStartLine).append(",");
+        row.append(distanceRaced).append(",");
+        row.append(fuelLevel).append(",");
+        row.append(lastLapTime).append(",");
+        row.append(RPM).append(",");
         for (int i = 0; i < 4; i++) {
-            row.append(String.format(Locale.US, "%.3f", wheelSpinVelocity[i])).append(",");
+            row.append(wheelSpinVelocity[i]).append(",");
         }
-        row.append(String.format(Locale.US, "%.3f", ZSpeed)).append(",");
-        row.append(String.format(Locale.US, "%.3f", Z)).append(",");
-        row.append(String.format(Locale.US, "%.3f", steer)).append(",");
-        row.append(String.format(Locale.US, "%.3f", accel)).append(",");
-        row.append(String.format(Locale.US, "%.3f", brake));
+        row.append(ZSpeed).append(",");
+        row.append(Z).append(",");
+        row.append(steer).append(",");
+        row.append(accel).append(",");
+        row.append(brake);
 
         dataRows.add(row.toString());
     }

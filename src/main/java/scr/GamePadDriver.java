@@ -2,7 +2,6 @@ package scr;
 
 import com.studiohartman.jamepad.ControllerManager;
 import com.studiohartman.jamepad.ControllerState;
-import com.studiohartman.jamepad.ControllerUnpluggedException;
 
 public class GamePadDriver extends SimpleDriver{
     private ControllerManager controllers;
@@ -16,39 +15,22 @@ public class GamePadDriver extends SimpleDriver{
             System.out.println("Inizializzazione Controller");
             controllers = new ControllerManager();
             controllers.initSDLGamepad();
+            recorder = new DataRecorder("dataMichele.csv");
             initialized = true;
             recorder = new DataRecorder("data.csv");
         }
         Action action = new Action();
-
-        for (int i = 0; i < controllers.getNumControllers(); i++) {
-
-            ControllerState state = controllers.getState(i);
-            System.out.println("Controller " + i + ": connected=" + state.isConnected);
-            if (state.isConnected) {
-                System.out.println(" - Left Stick X: " + state.leftStickX);
-                System.out.println(" - Right Trigger: " + state.rightTrigger);
-                System.out.println(" - Left Trigger: " + state.leftTrigger);
-                try {
-                    System.out.println(" - Name: " + controllers.getControllerIndex(i).getName());
-                } catch (ControllerUnpluggedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
 
         ControllerState controller = getActiveController();
         if(controller == null)
             return action;
 
         float rawSteer = -controller.leftStickX;
-        //System.out.println(-controller.leftStickX);
-        float deadzone = 0.15f;
+        float deadzone = 0.2f;
         float accel = controller.rightTrigger;
-        //System.out.println(controller.rightTrigger);
         float brake = controller.leftTrigger;
-        //System.out.println(controller.leftTrigger);
-        float sens = 0.25f;
+
+        float sens = 0.15f;
 
         float scaledSteer = 0;
         if(Math.abs(rawSteer) < deadzone)
@@ -56,7 +38,7 @@ public class GamePadDriver extends SimpleDriver{
         else{
             scaledSteer = (Math.abs(rawSteer) - deadzone) / (1 - deadzone);
         }
-        float steer = (float) Math.signum(rawSteer) * scaledSteer * sens;
+        float steer = Math.signum(rawSteer) * scaledSteer * sens;
 
         //Salva in RAM tutte le informazioni riguardo ai sensori
         recorder.record(sensors.getTrackEdgeSensors(), sensors.getAngleToTrackAxis(), sensors.getSpeed(), sensors.getTrackPosition(),
