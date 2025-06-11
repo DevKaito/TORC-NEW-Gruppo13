@@ -2,10 +2,8 @@ import socket
 import numpy as np
 from joblib import load
 
-# === Carica modello e scaler ===
+# === Carica modello ===
 model = load('mlp_torcs_model.joblib')
-x_scaler = load('mlp_torcs_x_scaler.joblib')
-y_scaler = load('mlp_torcs_y_scaler.joblib')
 
 HOST = 'localhost'
 PORT = 3001
@@ -31,15 +29,12 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 features = list(map(float, data.split(',')))
                 input_array = np.array(features).reshape(1, -1)
 
-                # === Scala input ===
-                input_scaled = x_scaler.transform(input_array)
+                input_scaled = input_array
 
-                # === Predici ===
                 prediction_scaled = model.predict(input_scaled)
 
-                # === Inversa la scala dei target ===
-                prediction = y_scaler.inverse_transform(prediction_scaled)[0]
-                prediction[1] = max(0, prediction[1])
+                prediction = prediction_scaled[0]
+
                 print(f"[Python] Predizione: {prediction}")
 
                 # === Invia al client ===

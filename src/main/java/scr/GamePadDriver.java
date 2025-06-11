@@ -15,7 +15,6 @@ public class GamePadDriver extends SimpleDriver{
             System.out.println("Inizializzazione Controller");
             controllers = new ControllerManager();
             controllers.initSDLGamepad();
-            recorder = new DataRecorder("dataMichele.csv");
             initialized = true;
             recorder = new DataRecorder("data.csv");
         }
@@ -65,8 +64,7 @@ public class GamePadDriver extends SimpleDriver{
 
     @Override
     public void reset() {
-
-        recorder = new DataRecorder("training_data.csv");
+        recorder = new DataRecorder("data.csv");
 
         System.out.println("Restarting the race!");
     }

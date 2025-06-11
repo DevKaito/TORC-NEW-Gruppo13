@@ -1,8 +1,6 @@
 import pandas as pd
-import numpy as np
 import time
 from sklearn.neural_network import MLPRegressor
-from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 import joblib
@@ -26,22 +24,18 @@ TARGET_COLUMNS = ["steer", "accel", "brake"]
 X = df[FEATURE_COLUMNS]
 y = df[TARGET_COLUMNS]
 
-# === 3. Standardizzazione ===
-x_scaler = StandardScaler()
-X_scaled = x_scaler.fit_transform(X)
-
-y_scaler = StandardScaler()
-y_scaled = y_scaler.fit_transform(y)
+X_raw = X.values
+y_raw = y.values
 
 # === 4. Train/Test Split ===
-X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_scaled, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X_raw, y_raw, test_size=0.2, random_state=42)
 
 # === 5. Modello ===
 model = MLPRegressor(
-    hidden_layer_sizes=(512, 512),
+    hidden_layer_sizes=(128, 128),
     activation='relu',
     solver='adam',
-    max_iter=50,
+    max_iter=500,
     random_state=1,
     verbose=True
 )
@@ -57,9 +51,7 @@ print(f"\nTempo totale di addestramento: {end_time - start_time:.2f} s")
 print(f"Mean Squared Error (scalato): {mse:.4f}")
 print(f"Model Score (R²): {model.score(X_test, y_test):.4f}")
 
-# === 7. Salva modello e scaler ===
+# === 7. Salva modello ===
 joblib.dump(model, "mlp_torcs_model.joblib")
-joblib.dump(x_scaler, "mlp_torcs_x_scaler.joblib")
-joblib.dump(y_scaler, "mlp_torcs_y_scaler.joblib")
-print("Modello e scaler salvati.")
+print("Modello salvato.")
 
